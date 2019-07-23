@@ -24,10 +24,12 @@
     </b-row>
     <b-row>
       <b-col v-show="isBusy">
-         <b-alert variant="info" show><b-spinner label="Spinning"></b-spinner> Loading users ...</b-alert>        
+        <b-alert variant="info" show>
+          <b-spinner label="Spinning"></b-spinner>Loading users ...
+        </b-alert>
       </b-col>
       <b-col v-show="users.length == 0 && !isBusy">
-         <b-alert variant="warning" show>No users found</b-alert>        
+        <b-alert variant="warning" show>No users found</b-alert>
       </b-col>
     </b-row>
     <b-table
@@ -45,17 +47,71 @@
       :filter="filter"
       @filtered="onFiltered"
     >
+      <template slot="name" slot-scope="data">
+        <b-link v-on:click.stop.prevent="showUserDetails(data.item)" href="#">{{data.item.name}}</b-link>
+      </template>
       <template
         slot="address"
         slot-scope="data"
       >{{data.item.address.suite}}, {{data.item.address.street}}, {{data.item.address.city}}</template>
       <template slot="view" slot-scope="data">
         <div role="group" class="btn-group">
-          <router-link class="btn btn-info" :to="'albumsOf/'+ data.item.username + '_' +  data.item.id">📷 Albums</router-link>
-          <router-link class="btn btn-success" :to="'photosOf/'+ data.item.username + '_' +  data.item.id">📜 Posts</router-link>
+          <router-link
+            class="btn btn-info"
+            :to="'albumsOf/'+ data.item.username + '_' +  data.item.id"
+          >📷 Albums</router-link>
+          <router-link
+            class="btn btn-success"
+            :to="'photosOf/'+ data.item.username + '_' +  data.item.id"
+          >📜 Posts</router-link>
         </div>
       </template>
     </b-table>
+
+    <b-modal size="lg" id="modalUser" title="User Details" ok-only>
+      <table v-if="currentUser" class="table table-striped table-hover table-bordered">
+        <tr>
+          <th>ID</th>
+          <td>{{currentUser.id}}</td>
+        </tr>
+        <tr>
+          <th>Name</th>
+          <td>{{currentUser.name}}</td>
+        </tr>
+        <tr>
+          <th>User Name</th>
+          <td>{{currentUser.username}}</td>
+        </tr>
+        <tr>
+          <th>Address</th>
+          <td>{{currentUser.address.suite}}, {{currentUser.address.street}}, {{currentUser.address.city}}, {{currentUser.address.zipcode}}</td>
+        </tr>
+        <tr>
+          <th>Phone</th>
+          <td><a :href="'tel:'+currentUser.phone">{{currentUser.phone}}</a></td>
+        </tr>
+        <tr>
+          <th>eMail</th>
+          <td><a :href="'mailto:'+currentUser.email">{{currentUser.email}}</a></td>
+        </tr>
+        <tr>
+          <th colspan="2">Company</th>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>{{currentUser.company.name}}</td>
+        </tr>
+        <tr>
+          <td>Catch Phrase</td>
+          <td>{{currentUser.company.catchPhrase}}</td>
+        </tr>
+        <tr>
+          <td>BS</td>
+          <td>{{currentUser.company.bs}}</td>
+        </tr>
+      </table>
+    </b-modal>
+
     <b-row>
       <b-col md="6" class="my-1">
         <b-pagination
@@ -74,6 +130,7 @@ export default {
   data: function() {
     return {
       filter: null,
+      currentUser: null,
       currentPage: 1,
       perPage: 5,
       users: [],
@@ -122,6 +179,10 @@ export default {
       });
   },
   methods: {
+    showUserDetails(user) {
+      this.currentUser = user;
+      this.$bvModal.show("modalUser");
+    },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;

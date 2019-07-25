@@ -25,7 +25,7 @@
     <b-row>
       <b-col v-show="isBusy">
         <b-alert variant="info" show>
-          <b-spinner label="Spinning"></b-spinner>Loading users ...
+          <b-spinner label="Spinning"></b-spinner> Loading users ...
         </b-alert>
       </b-col>
       <b-col v-show="users.length == 0 && !isBusy">
@@ -58,11 +58,11 @@
         <div role="group" class="btn-group">
           <router-link
             class="btn btn-info"
-            :to="'albumsOf/'+ data.item.username + '_' +  data.item.id"
+            :to="'albumsBy/'+ data.item.username + '_' +  data.item.id"
           >📷 Albums</router-link>
           <router-link
             class="btn btn-success"
-            :to="'photosOf/'+ data.item.username + '_' +  data.item.id"
+            :to="'postsBy/'+ data.item.username + '_' +  data.item.id"
           >📜 Posts</router-link>
         </div>
       </template>

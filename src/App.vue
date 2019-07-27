@@ -5,6 +5,15 @@
 </template>
 
 <style lang="scss">
+body {
+  background:#f5eded !important;
+}
+.container {
+  background: white;
+  box-shadow: 0px 0px 3px #361002;
+  padding: 10px;
+  border-radius: 7px;
+}
 .home {
   padding-top: 10px;
 }

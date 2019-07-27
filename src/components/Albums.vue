@@ -2,7 +2,7 @@
   <b-container class="text-left">
     <b-row>
       <b-col>
-        <h2 v-if="user">Posts by {{user ? user.name : '...'}}</h2>
+        <h2 v-if="user">Albums by {{user ? user.name : '...'}}</h2>
         <b-breadcrumb v-if="user" :items="paths"></b-breadcrumb>
       </b-col>
     </b-row>
@@ -10,7 +10,7 @@
       <b-col md="6" class="my-1">
         <b-form-group label-cols-sm="3" label="Search" class="mb-0">
           <b-input-group>
-            <b-form-input v-model="filter" placeholder="Search for the post title"></b-form-input>
+            <b-form-input v-model="filter" placeholder="Search for the album title"></b-form-input>
             <b-input-group-append>
               <b-button :disabled="!filter" @click="filter = ''">🗑 Clear</b-button>
             </b-input-group-append>
@@ -30,11 +30,11 @@
     <b-row>
       <b-col v-show="isBusy">
         <b-alert variant="info" show>
-          <b-spinner label="Spinning"></b-spinner> Loading posts ...
+          <b-spinner label="Spinning"></b-spinner>Loading albums ...
         </b-alert>
       </b-col>
       <b-col v-show="posts.length == 0 && !isBusy">
-        <b-alert variant="warning" show>No posts found</b-alert>
+        <b-alert variant="warning" show>No albums found</b-alert>
       </b-col>
     </b-row>
     <b-row>
@@ -42,7 +42,7 @@
         <ol>
           <li :key="post.id" v-for="post in filteredPosts">
             <router-link
-              :to="'/post/' + post.title.split(' ').join('_') + '_' + post.id"
+              :to="'/album/' + post.title.split(' ').join('_') + '_' + post.id"
             >{{post.title}}</router-link>
           </li>
         </ol>
@@ -76,7 +76,7 @@ export default {
           href: "/"
         },
         {
-          text: "Posts by ",
+          text: "Albums by ",
           active: true
         }
       ]
@@ -169,7 +169,7 @@ export default {
       let app = this;
       app.isBusy = true;
       axios
-        .get("posts?userId=" + userID)
+        .get("albums?userId=" + userID)
         .then(response => {
           app.posts = response.data;
           app.filterPosts();

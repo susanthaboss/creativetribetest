@@ -17,7 +17,7 @@
         </b-form-group>
       </b-col>
       <b-col md="6" class="my-1">
-        <b-form-group label-cols-sm="3" label="Per page" class="mb-0">
+        <b-form-group label-cols-sm="3" label="users Per page" class="mb-0">
           <b-form-select v-model="perPage" :options="pageOptions"></b-form-select>
         </b-form-group>
       </b-col>

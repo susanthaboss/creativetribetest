@@ -2,44 +2,35 @@
   <b-container class="text-left">
     <b-row>
       <b-col>
-        <h2 v-if="post">{{post ? post.title : 'Loading post title'}}</h2>
+        <h2 v-if="post">{{post ? post.title : 'Loading album title'}}</h2>
         <b-breadcrumb v-if="post" :items="paths"></b-breadcrumb>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <article>{{post ? post.body : 'Loading post content...'}}</article>
+        <article>{{post ? post.body : 'Loading album content...'}}</article>
         <hr />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <h4 v-if="comments.length > 0">Comments</h4>
-        <h4 v-if="loadingComments"> Loading Comments ....</h4>
-        <h4 v-if="comments & comments.length == 0 & loadingComments == false"></h4>
-      </b-col>
-      <b-col>
-        <b-form-group label-cols-sm="3" label="Sort By" class="mb-0">
-          <b-input-group>
-            <b-form-select
-              @change="comments = comments.reverse()"
-              v-model="selectedSort"
-              :options="sortingOptions"
-            ></b-form-select>
-          </b-input-group>
-        </b-form-group>
+        <h4 v-if="loadingphotos"> Loading photos ....</h4>
+        <h4 v-if="photos & photos.length == 0 & loadingphotos == false">No photos found</h4>
       </b-col>
     </b-row>
-    <b-row :key="comment.id" v-for="comment in comments">
-      <b-col>
-        <hr />
-        <p>
-          By
-          <b-link :href="'mailto:' + comment.email ">{{comment.name}}</b-link>
-        </p>
-        <p class="comment-box">{{comment.body}}</p>
+    <b-row>
+      <b-col class="photo-col" col cols="12" sm="12" md="4" lg="3" xl="2" :key="photo.id" v-for="photo in photos">
+        <b-img
+          @click="show(photo.index)"
+          thumbnail
+          fluid
+          :src="photo.thumbnailUrl"
+          :alt="photo.title"
+        ></b-img>
+        <p @click="show(photo.index)" class="photo-caption">{{photo.title}}</p>
       </b-col>
     </b-row>
+    <vue-easy-lightbox :visible="visible" :imgs="imgs" :index="index" @hide="handleHide"></vue-easy-lightbox>
   </b-container>
 </template>
 <script>
@@ -47,6 +38,9 @@ import axios from "axios";
 export default {
   data: function() {
     return {
+      imgs: [], // Img Url , string or Array
+      visible: false,
+      index: 0, // default
       selectedSort: "oldest",
       sortingOptions: [
         { value: "oldest", text: "Oldes First" },
@@ -55,17 +49,17 @@ export default {
       isBusy: false,
       post: null,
       postID: null,
-      loadingComments: false,
+      loadingphotos: false,
       user: null,
-      comments: [],
+      photos: [],
       paths: [
         {
           text: "Home",
           href: "/"
         },
         {
-          text: "Posts by ",
-          href: "/postsBy/"
+          text: "Albums by ",
+          href: "/albumsBy/"
         },
         {
           text: "loading post title...",
@@ -81,6 +75,13 @@ export default {
     this.getPost(this.postID);
   },
   methods: {
+    show(indx) {
+      this.index = indx; // index of imgList
+      this.visible = true;
+    },
+    handleHide() {
+      this.visible = false;
+    },
     getUser(userID) {
       let app = this;
       app.isBusy = true;
@@ -104,11 +105,11 @@ export default {
       this.isBusy = true;
       let app = this;
       axios
-        .get("posts/" + postID)
+        .get("albums/" + postID)
         .then(response => {
           app.post = response.data;
           app.getUser(app.post.userId);
-          app.getComments(app.post.id);
+          app.getphotos(app.post.id);
           app.isBusy = false;
           //adjusts the bredcumbs after getting the user details
           app.paths[2].text = app.post.title;
@@ -119,14 +120,21 @@ export default {
         });
     },
 
-    getComments(postID) {
+    getphotos(postID) {
       let app = this;
-      app.loadingComments = true;
+      app.loadingphotos = true;
       axios
-        .get("comments?postId=" + postID)
+        .get("photos?albumId=" + postID)
         .then(response => {
-          app.comments = response.data;
-          app.loadingComments = false;
+          app.photos = response.data;
+          app.imgs = [];
+
+          for (let index = 0; index < app.photos.length; index++) {
+            app.imgs.push(app.photos[index].url);
+            app.photos[index]["index"] = index;
+          }
+
+          app.loadingphotos = false;
         })
         .catch(e => {
           console.error(e);
@@ -137,8 +145,13 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-.comment-box
-  margin: 0 20px
-.comment-box, article
-  white-space: pre
+.img-thumbnail
+  margin-bottom: 20px
+  width: 150px
+  height: 150px
+.photo-caption
+  text-align: center
+  font-size: smaller
+.photo-col p,img
+  cursor: pointer
 </style>

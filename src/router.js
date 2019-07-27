@@ -42,6 +42,26 @@ export default new Router({
       component: function() {
         return import(/* webpackChunkName: "post" */ "./views/Post.vue");
       }
+    },
+    {
+      path: "/albumsBy/:userName?",
+      name: "albums",
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: function() {
+        return import(/* webpackChunkName: "albums" */ "./views/Albums.vue");
+      }
+    },
+    {
+      path: "/album/:postname?",
+      name: "album",
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: function() {
+        return import(/* webpackChunkName: "album" */ "./views/Album.vue");
+      }
     }
   ]
 });

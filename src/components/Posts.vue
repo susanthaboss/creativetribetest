@@ -2,15 +2,15 @@
   <b-container class="text-left">
     <b-row>
       <b-col>
-        <h2>Posts by {{user ? user.name : '...'}}</h2>
-        <b-breadcrumb :items="paths"></b-breadcrumb>
+        <h2 v-if="user">Posts by {{user ? user.name : '...'}}</h2>
+        <b-breadcrumb v-if="user" :items="paths"></b-breadcrumb>
       </b-col>
     </b-row>
     <b-row>
       <b-col md="6" class="my-1">
         <b-form-group label-cols-sm="3" label="Search" class="mb-0">
           <b-input-group>
-            <b-form-input v-model="filter" placeholder="Search for post title"></b-form-input>
+            <b-form-input v-model="filter" placeholder="Search for the post title"></b-form-input>
             <b-input-group-append>
               <b-button :disabled="!filter" @click="filter = ''">🗑 Clear</b-button>
             </b-input-group-append>
@@ -21,7 +21,7 @@
       <b-col md="6" class="my-1">
         <b-form-group label-cols-sm="3" label="Sort By" class="mb-0">
           <b-input-group>
-            <b-form-select v-model="selectedSort" :options="sortingOptions"></b-form-select>
+            <b-form-select @change="filterPosts()" v-model="selectedSort" :options="sortingOptions"></b-form-select>
           </b-input-group>
         </b-form-group>
         <hr />
@@ -30,7 +30,7 @@
     <b-row>
       <b-col v-show="isBusy">
         <b-alert variant="info" show>
-          <b-spinner label="Spinning"></b-spinner> Loading posts ...
+          <b-spinner label="Spinning"></b-spinner>Loading posts ...
         </b-alert>
       </b-col>
       <b-col v-show="posts.length == 0 && !isBusy">
@@ -40,7 +40,7 @@
     <b-row>
       <b-col>
         <ol>
-          <li :key="post.id" v-for="post in sorted">
+          <li :key="post.id" v-for="post in filteredPosts">
             <router-link
               :to="'/post/' + post.title.split(' ').join('_') + '_' + post.id"
             >{{post.title}}</router-link>
@@ -61,6 +61,7 @@ export default {
       userName: null,
       userID: null,
       posts: [],
+      filteredPosts: [],
       isBusy: false,
       sortingOptions: [
         { value: "oldest", text: "Oldes First" },
@@ -71,7 +72,7 @@ export default {
       selectedSort: "oldest",
       paths: [
         {
-          text: "Users",
+          text: "Home",
           href: "/"
         },
         {
@@ -90,36 +91,15 @@ export default {
     this.getUser(this.userID);
     this.getPosts(this.userID);
   },
-  computed: {
-    sorted() {
-      let retval;
-      let app = this;
-      switch (app.selectedSort) {
-        case "oldest":
-          retval = app.filterClient.sort(function(a, b) {
-            return a.id > b.id;
-          });
-          break;
-        case "newest":
-          retval = app.filterClient
-            .sort((a, b) => (a.id < b.id ? 1 : b.id > a.id ? -1 : 0))
-            .reverse();
-          break;
-        case "alphaasc":
-          retval = app.filterClient.sort((a, b) => a.title.localeCompare(b.title));
-          break;
-        case "alphadec":
-          retval = app.filterClient
-            .sort((a, b) => a.title.localeCompare(b.title))
-            .reverse();
-          break;
-        default:
-          retval = app.filterClient;
-          break;
-      }
-
-      return retval;
-    },
+  computed: {},
+  watch: {
+    // on change and keypress won't work as user type on text box
+    // so had to use a watcher
+    filter: function() {
+      this.filterPosts();
+    }
+  },
+  methods: {
     filterClient() {
       let app = this;
       if (app.posts) {
@@ -133,36 +113,71 @@ export default {
       } else {
         return [];
       }
-    }
-  },
+    },
+    filterPosts() {
+      let retval;
+      let app = this;
+      switch (app.selectedSort) {
+        case "oldest":
+          retval = app.filterClient().sort(function(a, b) {
+            return a.id > b.id;
+          });
+          break;
+        case "newest":
+          retval = app
+            .filterClient()
+            .sort(function(a, b) {
+              return a.id > b.id;
+            })
+            .reverse();
+          break;
+        case "alphaasc":
+          retval = app
+            .filterClient()
+            .sort((a, b) => a.title.localeCompare(b.title));
+          break;
+        case "alphadec":
+          retval = app
+            .filterClient()
+            .sort((a, b) => a.title.localeCompare(b.title))
+            .reverse();
+          break;
+        default:
+          retval = app.filterClient();
+          break;
+      }
 
-  methods: {
+      app.filteredPosts = retval;
+    },
     getUser(userID) {
-      this.isBusy = true;
+      let app = this;
+      app.isBusy = true;
       axios
         .get("users/" + userID)
         .then(response => {
-          this.user = response.data;
-          this.isBusy = false;
+          app.user = response.data;
+          app.isBusy = false;
           //adjusts the bredcumbs after getting the user details
-          this.paths[1].text = this.paths[1].text + this.user.name;
+          app.paths[1].text = app.paths[1].text + app.user.name;
         })
         .catch(e => {
-          console.error(e);
+          console.log(e);
           this.isBusy = false;
         });
     },
     getPosts(userID) {
-      this.isBusy = true;
+      let app = this;
+      app.isBusy = true;
       axios
         .get("posts?userId=" + userID)
         .then(response => {
-          this.posts = response.data;
-          this.isBusy = false;
+          app.posts = response.data;
+          app.filterPosts();
+          app.isBusy = false;
         })
         .catch(e => {
-          console.error(e);
-          this.isBusy = false;
+          console.log(e);
+          app.isBusy = false;
         });
     }
   }

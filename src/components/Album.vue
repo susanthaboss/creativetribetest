@@ -2,24 +2,36 @@
   <b-container class="text-left">
     <b-row>
       <b-col>
-        <h2 v-if="post">{{post ? post.title : 'Loading album title'}}</h2>
+        <h2 v-if="post">{{ post ? post.title : "Loading album title" }}</h2>
         <b-breadcrumb v-if="post" :items="paths"></b-breadcrumb>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <article>{{post ? post.body : 'Loading album content...'}}</article>
+        <article>{{ post ? post.body : "Loading album content..." }}</article>
         <hr />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <h4 v-if="loadingphotos"> Loading photos ....</h4>
-        <h4 v-if="photos & photos.length == 0 & loadingphotos == false">No photos found</h4>
+        <h4 v-if="loadingphotos">Loading photos ....</h4>
+        <h4 v-if="photos & (photos.length == 0) & (loadingphotos == false)">
+          No photos found
+        </h4>
       </b-col>
     </b-row>
     <b-row>
-      <b-col class="photo-col" col cols="12" sm="12" md="4" lg="3" xl="2" :key="photo.id" v-for="photo in photos">
+      <b-col
+        class="photo-col"
+        col
+        cols="12"
+        sm="12"
+        md="4"
+        lg="3"
+        xl="2"
+        :key="photo.id"
+        v-for="photo in photos"
+      >
         <b-img
           @click="show(photo.index)"
           thumbnail
@@ -27,10 +39,17 @@
           :src="photo.thumbnailUrl"
           :alt="photo.title"
         ></b-img>
-        <p @click="show(photo.index)" class="photo-caption">{{photo.title}}</p>
+        <p @click="show(photo.index)" class="photo-caption">
+          {{ photo.title }}
+        </p>
       </b-col>
     </b-row>
-    <vue-easy-lightbox :visible="visible" :imgs="imgs" :index="index" @hide="handleHide"></vue-easy-lightbox>
+    <vue-easy-lightbox
+      :visible="visible"
+      :imgs="imgs"
+      :index="index"
+      @hide="handleHide"
+    ></vue-easy-lightbox>
   </b-container>
 </template>
 <script>

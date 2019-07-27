@@ -5,8 +5,7 @@
 </template>
 
 <style lang="scss">
-
-.home{
+.home {
   padding-top: 10px;
 }
 

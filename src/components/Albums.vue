@@ -2,7 +2,7 @@
   <b-container class="text-left">
     <b-row>
       <b-col>
-        <h2 v-if="user">Albums by {{user ? user.name : '...'}}</h2>
+        <h2 v-if="user">Albums by {{ user ? user.name : "..." }}</h2>
         <b-breadcrumb v-if="user" :items="paths"></b-breadcrumb>
       </b-col>
     </b-row>
@@ -10,9 +10,14 @@
       <b-col md="6" class="my-1">
         <b-form-group label-cols-sm="3" label="Search" class="mb-0">
           <b-input-group>
-            <b-form-input v-model="filter" placeholder="Search for the album title"></b-form-input>
+            <b-form-input
+              v-model="filter"
+              placeholder="Search for the album title"
+            ></b-form-input>
             <b-input-group-append>
-              <b-button :disabled="!filter" @click="filter = ''">🗑 Clear</b-button>
+              <b-button :disabled="!filter" @click="filter = ''"
+                >🗑 Clear</b-button
+              >
             </b-input-group-append>
           </b-input-group>
         </b-form-group>
@@ -21,7 +26,11 @@
       <b-col md="6" class="my-1">
         <b-form-group label-cols-sm="3" label="Sort By" class="mb-0">
           <b-input-group>
-            <b-form-select @change="filterPosts()" v-model="selectedSort" :options="sortingOptions"></b-form-select>
+            <b-form-select
+              @change="filterPosts()"
+              v-model="selectedSort"
+              :options="sortingOptions"
+            ></b-form-select>
           </b-input-group>
         </b-form-group>
         <hr />
@@ -43,7 +52,8 @@
           <li :key="post.id" v-for="post in filteredPosts">
             <router-link
               :to="'/album/' + post.title.split(' ').join('_') + '_' + post.id"
-            >{{post.title}}</router-link>
+              >{{ post.title }}</router-link
+            >
           </li>
         </ol>
       </b-col>

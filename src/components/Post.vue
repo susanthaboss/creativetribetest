@@ -2,21 +2,23 @@
   <b-container class="text-left">
     <b-row>
       <b-col>
-        <h2 v-if="post">{{post ? post.title : 'Loading post title'}}</h2>
+        <h2 v-if="post">{{ post ? post.title : "Loading post title" }}</h2>
         <b-breadcrumb v-if="post" :items="paths"></b-breadcrumb>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <article>{{post ? post.body : 'Loading post content...'}}</article>
+        <article>{{ post ? post.body : "Loading post content..." }}</article>
         <hr />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
         <h4 v-if="comments.length > 0">Comments</h4>
-        <h4 v-if="loadingComments"> Loading Comments ....</h4>
-        <h4 v-if="comments & comments.length == 0 & loadingComments == false"></h4>
+        <h4 v-if="loadingComments">Loading Comments ....</h4>
+        <h4
+          v-if="comments & (comments.length == 0) & (loadingComments == false)"
+        ></h4>
       </b-col>
       <b-col>
         <b-form-group label-cols-sm="3" label="Sort By" class="mb-0">
@@ -35,9 +37,9 @@
         <hr />
         <p>
           By
-          <b-link :href="'mailto:' + comment.email ">{{comment.name}}</b-link>
+          <b-link :href="'mailto:' + comment.email">{{ comment.name }}</b-link>
         </p>
-        <p class="comment-box">{{comment.body}}</p>
+        <p class="comment-box">{{ comment.body }}</p>
       </b-col>
     </b-row>
   </b-container>

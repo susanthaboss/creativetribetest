@@ -97,7 +97,7 @@ export default {
             app.paths[1].href + app.user.username + "_" + app.user.id;
         })
         .catch(e => {
-          console.error(e);
+          console.log(e);
           app.isBusy = false;
           app.$swal(
             "Oops",
@@ -121,7 +121,7 @@ export default {
           app.paths[2].text = app.post.title;
         })
         .catch(e => {
-          console.error(e);
+          console.log(e);
           app.isBusy = false;
           app.$swal(
             "Oops",
@@ -141,7 +141,7 @@ export default {
           app.loadingComments = false;
         })
         .catch(e => {
-          console.error(e);
+          console.log(e);
           app.isBusy = false;
           app.$swal(
             "Oops",

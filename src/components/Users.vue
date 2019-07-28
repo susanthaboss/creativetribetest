@@ -197,7 +197,7 @@ export default {
         app.isBusy = false;
       })
       .catch(e => {
-        console.error(e);
+        console.log(e);
         app.isBusy = false;
         app.$swal(
           "Oops",

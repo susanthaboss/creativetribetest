@@ -6,7 +6,7 @@
 
 <style lang="scss">
 body {
-  background:#f5eded !important;
+  background: #f5eded !important;
 }
 .container {
   background: white;

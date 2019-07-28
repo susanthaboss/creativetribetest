@@ -134,12 +134,9 @@ export default {
           });
           break;
         case "newest":
-          retval = app
-            .filterClient()
-            .sort(function(a, b) {
-              return a.id > b.id;
-            })
-            .reverse();
+          retval = app.filterClient().sort(function(a, b) {
+            return a.id < b.id;
+          });
           break;
         case "alphaasc":
           retval = app
@@ -173,6 +170,12 @@ export default {
         .catch(e => {
           console.log(e);
           this.isBusy = false;
+
+          this.$swal(
+            "Oops",
+            "We failed to load the users. This might due to a network or server error. Please check console for more information",
+            "error"
+          );
         });
     },
     getPosts(userID) {
@@ -188,6 +191,12 @@ export default {
         .catch(e => {
           console.log(e);
           app.isBusy = false;
+
+          app.$swal(
+            "Oops",
+            "We failed to load the posts. This might due to a network or server error. Please check console for more information",
+            "error"
+          );
         });
     }
   }

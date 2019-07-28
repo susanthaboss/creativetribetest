@@ -33,7 +33,7 @@
     <b-row>
       <b-col v-show="isBusy">
         <b-alert variant="info" show>
-          <b-spinner label="Spinning"></b-spinner> Loading users ...
+          <b-spinner label="Spinning"></b-spinner>Loading users ...
         </b-alert>
       </b-col>
       <b-col v-show="users.length == 0 && !isBusy">
@@ -56,14 +56,14 @@
       @filtered="onFiltered"
     >
       <template slot="name" slot-scope="data">
-        <b-link v-on:click.stop.prevent="showUserDetails(data.item)" href="#">{{
-          data.item.name
-        }}</b-link>
+        <b-link v-on:click.stop.prevent="showUserDetails(data.item)" href="#">
+          {{ data.item.name }}
+        </b-link>
       </template>
-      <template slot="address" slot-scope="data"
-        >{{ data.item.address.suite }}, {{ data.item.address.street }},
-        {{ data.item.address.city }}</template
-      >
+      <template slot="address" slot-scope="data">
+        {{ data.item.address.suite }}, {{ data.item.address.street }},
+        {{ data.item.address.city }}
+      </template>
       <template slot="view" slot-scope="data">
         <div role="group" class="btn-group">
           <router-link
@@ -187,17 +187,23 @@ export default {
     };
   },
   mounted() {
-    this.isBusy = true;
+    let app = this;
+    app.isBusy = true;
     axios
       .get("users")
       .then(response => {
-        this.users = response.data;
-        this.totalRows = this.users.length;
-        this.isBusy = false;
+        app.users = response.data;
+        app.totalRows = app.users.length;
+        app.isBusy = false;
       })
       .catch(e => {
         console.error(e);
-        this.isBusy = false;
+        app.isBusy = false;
+        app.$swal(
+          "Oops",
+          "We failed to load the users. This might due to a network or server error. Please check console for more information",
+          "error"
+        );
       });
   },
   methods: {

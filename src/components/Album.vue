@@ -117,6 +117,11 @@ export default {
         .catch(e => {
           console.error(e);
           app.isBusy = false;
+          app.$swal(
+            "Oops",
+            "We failed to load the users. This might due to a network or server error. Please check console for more information",
+            "error"
+          );
         });
     },
 
@@ -136,6 +141,11 @@ export default {
         .catch(e => {
           console.error(e);
           app.isBusy = false;
+          app.$swal(
+            "Oops",
+            "We failed to load the albums. This might due to a network or server error. Please check console for more information",
+            "error"
+          );
         });
     },
 
@@ -158,6 +168,11 @@ export default {
         .catch(e => {
           console.error(e);
           app.isBusy = false;
+          app.$swal(
+            "Oops",
+            "We failed to load the photos. This might due to a network or server error. Please check console for more information",
+            "error"
+          );
         });
     }
   }

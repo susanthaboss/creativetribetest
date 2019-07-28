@@ -99,6 +99,11 @@ export default {
         .catch(e => {
           console.error(e);
           app.isBusy = false;
+          app.$swal(
+            "Oops",
+            "We failed to load the posts. This might due to a network or server error. Please check console for more information",
+            "error"
+          );
         });
     },
 
@@ -118,6 +123,11 @@ export default {
         .catch(e => {
           console.error(e);
           app.isBusy = false;
+          app.$swal(
+            "Oops",
+            "We failed to load the posts. This might due to a network or server error. Please check console for more information",
+            "error"
+          );
         });
     },
 
@@ -133,6 +143,11 @@ export default {
         .catch(e => {
           console.error(e);
           app.isBusy = false;
+          app.$swal(
+            "Oops",
+            "We failed to load the comments. This might due to a network or server error. Please check console for more information",
+            "error"
+          );
         });
     }
   }

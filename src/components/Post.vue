@@ -96,8 +96,7 @@ export default {
           app.paths[1].href =
             app.paths[1].href + app.user.username + "_" + app.user.id;
         })
-        .catch(e => {
-          console.log(e);
+        .catch(function() {
           app.isBusy = false;
           app.$swal(
             "Oops",
@@ -120,8 +119,7 @@ export default {
           //adjusts the bredcumbs after getting the user details
           app.paths[2].text = app.post.title;
         })
-        .catch(e => {
-          console.log(e);
+        .catch(function() {
           app.isBusy = false;
           app.$swal(
             "Oops",
@@ -140,8 +138,7 @@ export default {
           app.comments = response.data;
           app.loadingComments = false;
         })
-        .catch(e => {
-          console.log(e);
+        .catch(function() {
           app.isBusy = false;
           app.$swal(
             "Oops",

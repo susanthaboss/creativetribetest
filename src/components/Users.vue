@@ -196,8 +196,7 @@ export default {
         app.totalRows = app.users.length;
         app.isBusy = false;
       })
-      .catch(e => {
-        console.log(e);
+      .catch(function() {
         app.isBusy = false;
         app.$swal(
           "Oops",

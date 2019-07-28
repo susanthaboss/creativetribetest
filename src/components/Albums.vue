@@ -170,8 +170,7 @@ export default {
           //adjusts the bredcumbs after getting the user details
           app.paths[1].text = app.paths[1].text + app.user.name;
         })
-        .catch(e => {
-          console.log(e);
+        .catch(function() {
           app.isBusy = false;
           app.$swal(
             "Oops",
@@ -190,8 +189,7 @@ export default {
           app.filterPosts();
           app.isBusy = false;
         })
-        .catch(e => {
-          console.log(e);
+        .catch(function() {
           app.isBusy = false;
           app.$swal(
             "Oops",
